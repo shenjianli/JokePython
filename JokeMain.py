@@ -36,7 +36,8 @@ def get_joke_page():
 
 if __name__ == '__main__':
 
-        jokePage = requests.get('http://www.jokeji.cn/list.htm')
+        #jokePage = requests.get('http://www.jokeji.cn/list.htm')
+        jokePage = requests.get('http://www.jokeji.cn/list_2.htm')
         jokePage.encoding = 'gbk'
 
         jokeList = get_joke_list(jokePage.text)  # 使用正则表达式找到所有笑话页面的链接
