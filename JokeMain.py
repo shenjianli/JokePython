@@ -6,6 +6,16 @@ domain = 'http://www.jokeji.cn/'
 
 
 def print_joke(joke):
+        if '<A' in joke and '</A>' in joke:
+                start = joke.index('<A')
+                end = joke.index('</A>')
+                exception_str = joke[start:end + 4]
+                joke = joke.replace(exception_str,'')
+        # if '<IMG' in joke:
+        #         start = joke.index('<IMG')
+        #         end = joke.index(start,'>')
+        #         img_str = joke[start:end + 1]
+        #         joke = joke.replace(img_str,'')
         if "<BR>" in joke:
                 joke_array = joke.split("<BR>")
                 for context in joke_array:
@@ -36,8 +46,8 @@ def get_joke_page():
 
 if __name__ == '__main__':
 
-        #jokePage = requests.get('http://www.jokeji.cn/list.htm')
-        jokePage = requests.get('http://www.jokeji.cn/list_2.htm')
+        jokePage = requests.get('http://www.jokeji.cn/list.htm')
+        #jokePage = requests.get('http://www.jokeji.cn/list_1.htm')
         jokePage.encoding = 'gbk'
 
         jokeList = get_joke_list(jokePage.text)  # 使用正则表达式找到所有笑话页面的链接
