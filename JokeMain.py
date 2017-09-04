@@ -6,16 +6,19 @@ domain = 'http://www.jokeji.cn/'
 
 
 def print_joke(joke):
+        if '&nbsp;' in joke:
+                joke = joke.replace('&nbsp;','')
+
         if '<A' in joke and '</A>' in joke:
                 start = joke.index('<A')
                 end = joke.index('</A>')
                 exception_str = joke[start:end + 4]
                 joke = joke.replace(exception_str,'')
-        # if '<IMG' in joke:
-        #         start = joke.index('<IMG')
-        #         end = joke.index(start,'>')
-        #         img_str = joke[start:end + 1]
-        #         joke = joke.replace(img_str,'')
+        if '<IMG' in joke:
+                start = joke.index('<IMG')
+                end = joke.index('00>')
+                img_str = joke[start:end + 3]
+                joke = joke.replace(img_str,'')
         if "<BR>" in joke:
                 joke_array = joke.split("<BR>")
                 for context in joke_array:
