@@ -1,4 +1,7 @@
 from flask import Flask
+import JokeDB
+import json
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -27,6 +30,15 @@ def show_post(post_id):
 @app.route('/projects/')
 def projects():
     return 'The project page'
+
+
+@app.route('/joke_json/test')
+def query_joke_json():
+    joke = JokeDB.query_mysql_data()
+    joke_json = json.dumps(joke, ensure_ascii=False)
+    print(joke_json)
+    return  joke_json
+
 
 if __name__ == '__main__':
     app.run()
