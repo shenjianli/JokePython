@@ -3,28 +3,47 @@
 # 笑话集中营
 import requests         # 导入requests库
 import re               # 导入正则表达式库
+import JokeDB
+domain = 'http://www.jokeji.cn'
 
-domain = 'http://www.jokeji.cn/'
-
-
-def print_joke(joke):
+def repleac_exception_str(joke):
         if '&nbsp;' in joke:
-                joke = joke.replace('&nbsp;','')
+                joke = joke.replace('&nbsp;', '')
 
         if '<A' in joke and '</A>' in joke:
                 start = joke.index('<A')
                 end = joke.index('</A>')
                 exception_str = joke[start:end + 4]
-                joke = joke.replace(exception_str,'')
+                joke = joke.replace(exception_str, '')
+
         if '<IMG' in joke:
                 start = joke.index('<IMG')
                 end = joke.index('00>')
                 img_str = joke[start:end + 3]
-                joke = joke.replace(img_str,'')
+                joke = joke.replace(img_str, '')
+
+        if '@' in joke:
+                start = joke.index('@')
+                author = joke[start]
+                joke = joke.replace(author, '')
+
+        if '“' in joke:
+                joke = joke.replace('“', ' ')
+
+        if '”' in joke:
+                joke = joke.replace('”', ' ')
+        if '"' in joke:
+                joke = joke.replace('"', ' ')
+
+        return joke
+
+def print_joke(joke):
         if "<BR>" in joke:
                 joke_array = joke.split("<BR>")
                 for context in joke_array:
                         print(context)
+        else:
+                print(joke)
 
 
 def find_jokes(content):
@@ -68,9 +87,11 @@ if __name__ == '__main__':
                 jokes = find_jokes(content)
 
                 for joke in jokes:  # 循环打印笑话
-                        print_joke(joke)
+                        joke_no_except = repleac_exception_str(joke)
+                        JokeDB.insert_mysql_data(link, joke_no_except)
+                        print_joke(joke_no_except)
                         print()                 # 打印一个换行
-
+        JokeDB.close_joke_db()
         # for jokeLink in jokeList:
         #         jokeContent = requests.get('http://www.jokeji.cn/' + jokeLink)      # 访问第一个链接
         #         jokeContent.encoding = 'gbk'
