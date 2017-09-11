@@ -14,3 +14,7 @@ http://docs.jinkan.org/docs/flask/quickstart.html#web
 http://www.cnblogs.com/fanglijiao/p/6970678.html
 
 2.
+
+
+Todo
+向数据库中记录上一次请求的site地址，为下一次请求做准备

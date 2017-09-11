@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask,request
 import JokeDB
 import json
+
 
 app = Flask(__name__)
 
@@ -41,6 +42,15 @@ def projects():
 @app.route('/joke/query')
 def query_joke_json():
     joke = JokeDB.query_mysql_data()
+    joke_json = json.dumps(joke, ensure_ascii=False)
+    print(joke_json)
+    return joke_json
+
+
+@app.route('/joke/query_by_date')
+def query_joke_by_date_json():
+    date = request.args.get('date')
+    joke = JokeDB.query_mysql_data_by_date(date)
     joke_json = json.dumps(joke, ensure_ascii=False)
     print(joke_json)
     return joke_json

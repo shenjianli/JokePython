@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 import time
 import pymysql
-import json
 
 # 打开数据库连接
 db = pymysql.connect("localhost", "root", "cqtddt@2016", "joke")
@@ -11,6 +10,17 @@ db.set_charset('utf8')
 cursor = db.cursor()
 
 
+# 打开数据库
+def open_db():
+	global db,cursor
+	# 打开数据库连接
+	db = pymysql.connect("localhost", "root", "cqtddt@2016", "joke")
+	db.set_charset('utf8')
+	# 使用 cursor() 方法创建一个游标对象 cursor
+	cursor = db.cursor()
+
+
+# 查看mysql版本号
 def select_mysql_version():
 
 	# 使用 execute()  方法执行 SQL 查询
@@ -24,12 +34,13 @@ def select_mysql_version():
 	return data
 
 
+# 创建Joke表
 def create_mysql_table():
 	# 使用 execute() 方法执行 SQL，如果表存在则删除
 	cursor.execute("DROP TABLE IF EXISTS JOKE")
 
 	# 使用预处理语句创建表
-	sql = """CREATE TABLE JOKE (JOKE_ID BIGINT primary key AUTO_INCREMENT  NOT NULL ,JOKE_NET_SITE  CHAR(150),JOKE_CONTENT TEXT,JOKE_DATE CHAR(20)) DEFAULT CHARSET=utf8"""
+	sql = """CREATE TABLE JOKE(JOKE_ID BIGINT primary key AUTO_INCREMENT NOT NULL, JOKE_NET_SITE CHAR(150), JOKE_CONTENT TEXT, JOKE_DATE CHAR(20) ) DEFAULT CHARSET = utf8 """
 
 	try:
 		cursor.execute(sql)
@@ -39,10 +50,13 @@ def create_mysql_table():
 		print("创建表失败")
 
 
+# 关闭数据库
 def close_joke_db():
+	cursor.close()
 	db.close
 
 
+# 向数据库中插入
 def insert_mysql_data(site, content):
 
 	datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -61,34 +75,8 @@ def insert_mysql_data(site, content):
 	 	print("fail")
 	# 关闭数据库连接
 
-def delete_mysql_data():
-	# SQL 删除语句
-	sql = "DELETE FROM EMPLOYEE WHERE AGE > '%d'" % (20)
-	try:
-		# 执行SQL语句
-		cursor.execute(sql)
-		# 提交修改
-		db.commit()
-	except:
-		# 发生错误时回滚
-		db.rollback()
 
-
-def update_mysql_data():
-	# SQL 更新语句
-	sql = "UPDATE EMPLOYEE SET AGE = AGE + 1 WHERE SEX = '%c'" % ('M')
-
-
-	try:
-		# 执行SQL语句
-		cursor.execute(sql)
-		# 提交到数据库执行
-		db.commit()
-	except:
-		# 发生错误时回滚
-		db.rollback()
-
-
+# 查询笑话数据，返回json字符串
 def query_mysql_data():
 	joke_list = []
 	joke_item = {}
@@ -123,6 +111,45 @@ def query_mysql_data():
 	return joke_item
 
 
+# 查询笑话数据，返回json字符串
+def query_mysql_data_by_date(date):
+	joke_list = []
+	joke_item = {}
+	# SQL 查询语句
+	sql = "SELECT * FROM JOKE WHERE JOKE_DATE > '%s'"
+	try:
+		# 执行SQL语句
+		cursor.execute(sql % date)
+		# 获取所有记录列表
+		results = cursor.fetchall()
+		for row in results:
+			joke_data = {}
+			joke_id = row[0]
+			joke_data['id'] = joke_id
+			joke_site = row[1]
+			joke_data['site'] = joke_site
+			joke_content = row[2]
+			if '<BR>' in joke_content:
+				joke_content = joke_content.replace("<BR>", "\n")
+			joke_data['content'] = joke_content
+			joke_date = row[3]
+			joke_data['date'] = joke_date
+			joke_list.append(joke_data)
+			# 打印结果
+			print("id=%d,site=%s,content=%s,date=%s" %(joke_id, joke_site, joke_content, joke_date))
+		joke_item['code'] = 1
+		joke_item['msg'] = '查询成功'
+		joke_item['data'] = joke_list;
+		#joke_item['jokes'] = joke_list
+	except:
+		print("Error: unable to fetch data")
+		joke_item['code'] = -1
+		joke_item['msg'] = '服务器异常'
+		joke_item['data'] = joke_list;
+		#joke_item['jokes'] = joke_list
+	return joke_item
+
+# 主方法
 if __name__ == '__main__':
 
 	version = select_mysql_version()
