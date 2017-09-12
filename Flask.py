@@ -56,5 +56,13 @@ def query_joke_by_date_json():
     return joke_json
 
 
+@app.route('/joke/query/base')
+def query_joke_by_num_json():
+    num = int(request.args.get('num'))
+    joke = JokeDB.query_mysql_data_by_num(num)
+    joke_json = json.dumps(joke, ensure_ascii=False)
+    print(joke_json)
+    return joke_json
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8010)

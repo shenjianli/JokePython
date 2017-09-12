@@ -50,10 +50,12 @@ if __name__ == '__main__':
         # else:
         #         print("已经为最新了，不需要更新了")
 
-        datetime = time.strftime("%Y%m%d", time.localtime())
-        print(datetime)
-        date = '2017-09-08'
-        result = JokeDB.query_mysql_data(date)
+        # datetime = time.strftime("%Y%m%d", time.localtime())
+        # print(datetime)/joke/query/base
+        # date = '2017-09-08'
+        # result = JokeDB.query_mysql_data(date)
+        # print(result)
+        result = JokeDB.query_mysql_data_by_num(10)
         print(result)
 
 
