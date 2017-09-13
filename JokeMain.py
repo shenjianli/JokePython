@@ -18,10 +18,10 @@ def repleac_exception_str(joke):
                 exception_str = joke[start:end + 4]
                 joke = joke.replace(exception_str, '')
 
-        if '<IMG' in joke:
+        if '<IMG' in joke and '0>' in joke:
                 start = joke.index('<IMG')
-                end = joke.index('00>')
-                img_str = joke[start:end + 3]
+                end = joke.index('0>')
+                img_str = joke[start:end + 2]
                 joke = joke.replace(img_str, '')
 
         if '@' in joke:
