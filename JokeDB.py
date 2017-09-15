@@ -116,7 +116,7 @@ def query_mysql_data_by_num(num):
 	joke_list = []
 	joke_item = {}
 	# SQL 查询语句
-	sql = "select * from joke ORDER BY JOKE_DATE DESC , JOKE_ID * 1 ASC  limit %d"
+	sql = "select * from joke ORDER BY JOKE_ID * 1 DESC  limit %d"
 	try:
 		# 执行SQL语句
 		cursor.execute(sql % num)
@@ -187,6 +187,61 @@ def query_mysql_data_by_date(date):
 		joke_item['data'] = joke_list;
 		#joke_item['jokes'] = joke_list
 	return joke_item
+
+
+# 查询笑话数据，返回json字符串
+def query_joke_data_by_id(end):
+	joke_list = []
+	joke_item = {}
+	# SQL 查询语句
+	sql = "select * from joke WHERE JOKE_ID > %d"
+	try:
+		# 执行SQL语句
+		cursor.execute(sql % end)
+		# 获取所有记录列表
+		results = cursor.fetchall()
+		for row in results:
+			joke_data = {}
+			joke_id = row[0]
+			joke_data['id'] = joke_id
+			joke_site = row[1]
+			joke_data['site'] = joke_site
+			joke_content = row[2]
+			if '<BR>' in joke_content:
+				joke_content = joke_content.replace("<BR>", "\n")
+			joke_data['content'] = joke_content
+			joke_date = row[3]
+			joke_data['date'] = joke_date
+			joke_list.append(joke_data)
+			# 打印结果
+			print("id=%d,site=%s,content=%s,date=%s" %(joke_id, joke_site, joke_content, joke_date))
+		joke_item['code'] = 1
+		joke_item['msg'] = '查询成功'
+		joke_item['data'] = joke_list;
+		#joke_item['jokes'] = joke_list
+	except:
+		print("Error: unable to fetch data")
+		joke_item['code'] = -1
+		joke_item['msg'] = '服务器异常'
+		joke_item['data'] = joke_list;
+		#joke_item['jokes'] = joke_list
+	return joke_item
+
+
+# 查询笑话数据，返回json字符串
+def query_joke_data_count():
+	# SQL 查询语句
+	sql = "select COUNT(*) from joke"
+	try:
+		# 执行SQL语句
+		cursor.execute(sql)
+		# 获取所有记录列表
+		result = cursor.fetchall()
+		count = int(result[0][0])
+	except:
+		print("Error: unable to fetch data")
+		#joke_item['jokes'] = joke_list
+	return count
 
 
 # 主方法

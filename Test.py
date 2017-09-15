@@ -55,7 +55,9 @@ if __name__ == '__main__':
         # date = '2017-09-08'
         # result = JokeDB.query_mysql_data(date)
         # print(result)
-        result = JokeDB.query_mysql_data_by_num(10)
+        result = JokeDB.query_joke_data_by_id(300)
         print(result)
+        # count = JokeDB.query_joke_data_count()
+        # print(count)
 
 

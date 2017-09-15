@@ -64,5 +64,24 @@ def query_joke_by_num_json():
     print(joke_json)
     return joke_json
 
+
+@app.route('/joke/update')
+def query_joke_by_num_json():
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
+    num = int(request.args.get('num'))
+
+    count = JokeDB.query_joke_data_count()
+
+    diff = count - end
+    if end == 0 or diff >= 100:
+        joke = JokeDB.query_mysql_data_by_num(100)
+    else:
+        joke = JokeDB.query_mysql_data_by_id(end)
+
+    joke_json = json.dumps(joke, ensure_ascii=False)
+    print(joke_json)
+    return joke_json
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8010)
