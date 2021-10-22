@@ -1,10 +1,13 @@
 #!/usr/bin/python3
+# -*- coding:utf-8 -*-
 
 # 笑话集中营
 import requests         # 导入requests库
 import re               # 导入正则表达式库
+
 import JokeDB
 import UpdateDB
+
 domain = 'http://www.jokeji.cn'
 
 

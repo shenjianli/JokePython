@@ -4,7 +4,7 @@ import time
 import pymysql
 
 # 打开数据库连接
-db = pymysql.connect("localhost", "root", "cqtddt@2016", "joke")
+db = pymysql.connect(host="localhost", user="root", passwd="shen111111", db="joke")
 db.set_charset('utf8')
 # 使用 cursor() 方法创建一个游标对象 cursor
 cursor = db.cursor()
@@ -14,7 +14,7 @@ cursor = db.cursor()
 def open_db():
 	global db,cursor
 	# 打开数据库连接
-	db = pymysql.connect("localhost", "root", "cqtddt@2016", "joke")
+	db = pymysql.connect(host="localhost", user="root", passwd="shen111111", db="joke")
 	db.set_charset('utf8')
 	# 使用 cursor() 方法创建一个游标对象 cursor
 	cursor = db.cursor()
