@@ -66,3 +66,10 @@ mysql> show databases;
 修改数据库root 密码
 
 执行 JokeDb.py  UpdateDB.py
+
+
+如果报错：
+RuntimeError: cryptography is required for sha256_password or caching_sha2_password
+
+解决方法：安装 cryptography
+pip3 install cryptography
